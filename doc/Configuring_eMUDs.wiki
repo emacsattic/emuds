@@ -1,0 +1,49 @@
+At first check the load path. This path needs to be extended with
+the place you installed eMUDs.
+
+    (if (or (eq system-type 'windows-nt) (eq system-type 'ms-dos))
+        (setq load-path (append (mapcar 'expand-file-name '("C:/GNU/emuds")) load-path ))
+        (setq load-path (append (mapcar 'expand-file-name '("~/.emuds")) load-path ))
+    )
+
+Now autoload two of the eMUDs_Commands. There is no need to autoload
+any other eMUDs_Commands. They come to life, once the game is started.
+
+    (autoload '/emuds     "emuds" "Talk to eMUDs." t)
+    (autoload '/addworld  "emuds" "Define a eMUDs world." t)
+
+Now add a world. The .emacs startup file may be at an insecure place.
+So I deceided against storing passwords in the .emacs startup file.
+The .emacs file only stores a character name, host name and port tripple.
+
+    (/addworld "RoM"    "RoM.MUD.De" 4000)
+
+Now tell eMUDs about some special places.
+
+    (if (or (eq system-type 'windows-nt) (eq system-type 'ms-dos))
+        (progn
+          (setq emuds-logs "C:/GNU/emuds-log/")
+          )
+      (setq emuds-db   "~/.emuds-db")
+      (setq emuds-logs "~/.emuds-logs/")
+      (setq emuds-maps "~/.emuds-maps/")
+      (setq emuds-pass "~/.emuds-pass")
+      )
+
+Last set some reasonable frame sizes.
+
+    (setq default-frame-alist (x-parse-geometry "80x25"))
+    (setq emuds-frame-alist (x-parse-geometry "80x32+2-30"))
+
+The emuds-pass file has to contain something like the following.
+
+    (setq emuds-login '(
+	("RoM" "name" "password" "" "1" "group all")
+	("World" "first" "2nd" "3rd" "4th" "nth")
+	)
+    )
+
+I case of Realm of Magic the first name, next password, next a blank
+return, next a 1 to enter the game, and a group all to form a group.
+Or in general. The Worldname from /addworld and list of strings to
+send on the next prompts during login.

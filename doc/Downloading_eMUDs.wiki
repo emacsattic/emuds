@@ -1,0 +1,10 @@
+At first install EMACS. Unix users may either install it from their
+distribution, or compile the most actual version from scratch after
+download from L<ftp://ftp.gnu.org/gnu/emacs/>. I provided ready to
+run zip archives of EMACS_for_Windows, as gamers dislike running a
+compiler.
+
+Next download either L<eMUDs-2005-08-14.zip> as a ZIP archive 
+or L<eMUDs-2005-08-14.tar.gz> as GZIP over GTAR.
+
+Proceed with Files_in_Detail or Installing_eMUDs

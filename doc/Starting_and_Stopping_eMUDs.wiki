@@ -1,0 +1,17 @@
+All eMUDs_Commands start with a slash. This is handy as tinifudge was
+also using the / to start commands, and i could convert my old chars
+by giving the eMUDs commands the same name. eMUDs_Commands can also
+be given interactive, and you have to start the game by running /emuds
+interactive. This is normaly done with &lt;m-x&gt;/emuds&lt;cr&gt;.
+
+Some usefull keyboard commands :
+
+| &lt;m-x&gt;/emuds&lt;cr&gt; | start the game |
+| &lt;m-x&gt;/quit&lt;cr&gt; | disconnects |
+| &lt;c-x&gt;52 | creates a new frame - try this with the output window |
+| &lt;c-x&gt;50 | deletes a frame - dont do this with the game frame |
+| &lt;c-x&gt;&lt;c-c&gt; | quit's the EMACS editor |
+
+Now &lt;m-x&gt; or &lt;c-x&gt; are shorthand notations for meta-x and control-x.
+Personal computer keyboards dont have a meta key, so the alt key has
+to serve this.

@@ -1,0 +1,55 @@
+All eMUDs_Commands that may to be called from the command line
+start with a slash. This means that a command line starting with
+a / wont be send to the MUD server, but eMUDs will place braces
+around and LISP execute them.
+
+eMUDs_Commands dont need to be interactive, if you only want to
+start them from command line. But they need to be interactive,
+if you want to start them with &lt;m-x&gt; or bind them on a
+function key. Function key commands should better start with
+the emuds- prefix, to avoid polluting the namespace used for
+command line commands.
+
+<ul>
+<li> /addworld (name host port)
+ Add a world to the list of known worlds.
+<li> /emuds ()
+ Ask for one of the defined worlds and start the game.
+<li> /load (mod)
+ Load some lisp code, just the same as load but interactive and
+ it can give from the eMUDs command line.
+<li> /reload ()
+ Reload all lisp files related to the world.
+<li> /queue (&amp;rest lines)
+ Queue lines to be send on prompt.
+<li> /send (line)
+ Send a line immediate to the server, ignoring presents or absense of
+ prompt and queue.
+<li> /mapkey (&amp;optional key func)
+ Map a key to a function. The function needs to be interactive,
+and should not start with a slash, but with the emuds- prefix.
+Furthermore key functions do not receive any arguments.
+ Using /mapkey without any arguments will delete all keyboard
+definitions.
+<li> /trigger (&amp;optional expr func &amp;rest args)
+ Defines a long living trigger by a regular expression a function
+and their arguments. The function does neither need to be interactive,
+nor does it need to be a command line function.
+ Using /trigger without any arguments will delete all trigger
+definitions.
+<li> /once (&optional expr func &amp;rest args)
+ Defines a trigger in the temporary trigger chain. Usage is the
+same as with /trigger, but calling /once without any argument
+is the main feature of this 2nd chain of triggers.
+<li> /quote ()
+ Queues each line of the current text buffer to the mud session.
+<li> /debug ()
+ Turns on debugging of the next bug.
+<li> /stop ()
+ Stop all triggers and queue.
+<li> /quit ()
+ Disconnect, save and quit the game.
+</ul>
+
+I deceided to keep the core set minimal, see Files_in_Detail for
+extensions of eMUDs.

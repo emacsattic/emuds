@@ -1,0 +1,36 @@
+eMUDs is known to run on EMACS 20.7 and 21.2.
+
+Newer ports of EMACS support W32 with sockets and windows.
+Do not try some EMACS 19.x - this is probately for MS-DOS only,
+and wont support sockets.
+
+I provide a copy of the archives from L<ftp://ftp.gnu.org/gnu/windows/emacs/20.7> here.
+
+=head2 floppy disk sized pkzip archives
+
+| L<em207_bin1.zip> | L<em207_bin4.zip> | L<em207_bin7.zip> | L<em207_lis3.zip> |
+| L<em207_bin2.zip> | L<em207_bin5.zip> | L<em207_lis1.zip> | L<em207_lis4.zip> |
+| L<em207_bin3.zip> | L<em207_bin6.zip> | L<em207_lis2.zip> | L<em207_lis5.zip> |
+
+Create a directory called C:\GNU\ and unpack the em207_bin?.zip files there.
+
+You may additionaly want to instal the em207_lis?.zip files. Those contain
+the EMACS lisp source, and provide a good reference to code examples.
+
+=head2 gnu/tar gnu/zip archives
+
+The easier way is to install the .tar.gz archives.
+
+- L<emacs-20.7-fullbin-i386.tar.gz> EMACS including LISP source
+- L<emacs-20.7-bin-i386.tar.gz> EMACS excluding LISP source
+
+Install one of them into C:\GNU\.
+
+=head2 registry and first start
+
+Start C:\GNU\emacs-20.7\bin\addpm.exe once to fix variables in the Windows
+registry. Create a symlink of C:\GNU\emacs-20.7\bin\emacs.exe and move this
+symlink to the Windows desktop.
+
+Try to start EMACS and quit it with ctrl-c ctrl-x after reading
+the Help->Tutorial.

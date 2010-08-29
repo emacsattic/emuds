@@ -1,0 +1,169 @@
+ ;;; EMACS                                                            EMACS ;;;
+ ;;; MACRO  eMUDs (c) Mon Dec 24 14:26:16 CET 2001                    MACRO ;;;
+ ;;; ACTED            GNU General Public License                      ACTED ;;;
+ ;;; CREDO            kraehe@copyleft.de                              CREDO ;;;
+ ;;; SODOM                                                            SODOM ;;;
+
+	tell em straight ...
+
+	well, i hav'nt used emacs before. it was to complex to me.
+	I was of course able to configure;make;make install it,
+	but i still use vi, 20 years of unix cant change in a day.
+
+	So i asume, that you, are also unfamilar with emacs, like me.
+
+1	download EMACS 20
+2	copy the emuds.emacs to $HOME/.emacs
+3	create a directory $HOME/.emuds
+4	copy emuds.el and world-Rom.el to $HOME/.emuds
+5	start EMACS
+6	press (m-x)/emuds to start the game
+7	type (return) to select Realm of Magic Uni Bremen
+8	use (m-x)/quit to quit the game
+9	use (c-x c-c) to quit EMACS
+
+	EMACS comes with tons of manuals. Explore them! The info files
+	are like a large text adventure, and there is no cheat mode.
+
+  	This readme file, will only explain using eMUDs !
+
+Downloading EMACS 20
+
+  I have tested EMACS 20 on a Debian/GNU/Linux system, where EMACS runs
+  out of the box. Rumors tell that EMACS also exists on other platforms,
+  like Windoof, VMS or Mac OS/X. You may try other EMACS packages, tell
+  me, how to adjust this readme to cope them.
+
+What does (m-x) mean ?
+
+  (m-x) is meta-x. There is no meta key, on my personal computer keyboard ?
+  The <alt> key is used on most keyboards. Only a small city in Germany
+  resist. They have a <koelsch> key. So (m-x) means to press <alt-x>,
+  while (c-x c-c) means to press <control-x> <control-c>.
+
+  (m-x) is a kind of command prompt. All user level eMUDs commands start
+  with a slash. A (m-x / tab) should give a list of the interactive
+  commans like :
+
+	Possible completions are:
+	/addworld			   /emuds
+	/mapkey				   /quit
+	/reload				   /trigger
+
+  Those are interactive eMUDs commands, you can call em with (m-x)
+
+/addworld (name host port)
+
+  Addworld will add a world to the list of valid wolds. Each world is
+  not only a name for a hosted service. The 'name' also defines a file
+  to execute, when you enter the world. I asume Rom, in the future
+  readme, so you need to define a file .emuds/emuds-FooBaa.el, if you
+  want to write functions and triggers for the FooBaa world.
+
+  Usage in .emacs : (/addworld "Rom"  "Rom.Mud.De" 4000)
+
+/emuds
+
+  Ask for a world, and starts a session. The file .emuds/world-Rom.el
+  is executed. Deceide on a thief class and on any of the races.
+
+  If you dont know Realm of Magic :
+        gossip hi, I'm new here - any Fellow online for help ?
+
+/quit
+
+  Ends your eMUDs session. You normaly dont need this, as eMUDs detects
+  a 'Connection closed by foreign host', to call /quit itself.
+
+/reload
+
+  Just a handy way to reload your .emuds/world-Rom.el file.
+
+/trigger (&optional expr func &rest args)
+
+  Will clean all user level triggers, if called interactive or without
+  any arguments. Else it will push a regular expression and a function
+  with option arguments to the emuds-user-chain.
+
+  Usage in .emuds/world-Rom.el :
+        (defvar /drink "bottle" "your current drink")
+        (/trigger "^You are thirsty.$" '/enqueue '(concat "drink " /drink))
+
+  Note, that function and arguments are normaly quoted, as they have to
+  run, when the trigger is running. The function does not need to be
+  interactive, and the /trigger definition is able to pass arguments
+  to the function. Those arguments are either strings, or quoted lists
+  to run at trigger time, or normal lists to run at definition time.
+
+/mapkey (&optional key func)
+
+  This function will reset the local keymap, if called interactive or
+  without any arguments. The /mapkey definition will map a vector or string
+  to a function. Those functions have to be interactive, and can not receive
+  any arguments.
+
+  Usage in .emuds/world-Rom.el :
+        (defun /recall-key () "recall myself" (interactive)
+          (/enqueue "recite recall")
+          (/send (concat "get recall " /bag)) )
+        (/mapkey [home] '/recall-key)
+
+  The above exploration of the interactive commands, tell that there
+  are more slash command, for non interactive use.
+
+/enqueue (&rest lines)
+
+  This command will add lines to the tail of the queue.
+
+/send (line)
+
+  This will send a line immediate.
+
+Exploring .emuds/world-Rom.el
+
+  This file will first setup the emuds-prechain by calling (emuds-setup-rom).
+  The eMUDs mode comes with 3 defined prechains called emuds-setup-rom,
+  emuds-setup-circle and emuds-setup-debug. The last is used as a fallback
+  for undefined worlds, so you can debug the telnet to provide a prechain
+  for other MUDs.
+
+  The next two lines will call (/trigger) and (/mapkey) to reset user
+  defined triggers and keys.
+  
+  Following are a bunch of variables to define the status of the character.
+  Each of them as has a function definition of the same name to change the
+  value interactive with (m-x).
+    
+        /bag (container)                 "set your container"
+        /eat (food)                      "set your food"
+        /drink (container)               "set your drink"
+        /victim (foo)                    "setup victim"
+        /assist (friend)                 "setup assist"
+        /consider (foo)                  "consider a victim"
+        /follow (friend)                 "follow a friend"
+        /track (victim)                  "setup victim to track"
+        /walker ()                       "become a walker"
+
+  Next some basic triggers automate eating, drinking and looting.
+  
+  A large block is now defining function keys. I placed /track-key on F1,
+  as it best shows, how to write complex triggers. At first a /walker-hook
+  is bound to the /track-hook alias. This will repeat the tracking, 
+  if in /walker mode. The /track-key itself, will bind a /trigger to
+  ask for equal tracks at least to times, and walk into that direction.
+  The /walker interactive will cause the /step-key to run after the
+  walk, till you found the victim.
+
+  I placed "group" on F2, "get all corpse" on F3, "sacr corpse" on F4,
+  "backstab/flee" on F5, "assist" on F6, "rescue" on F7, "knockout" on F8,
+  "flee" on F9, "quaff healing" on F10, "bash" on F11 and "kick" on F12.
+
+  I placed "recite recall" on [home] and PgUp/PgDn toggle the /wimp mode
+  to decide if to flee on F5. North,east,south,west,up and down are
+  bound to the keypat directions.
+
+  And a last (message "loaded Realm of Magic") should tell a user on
+  /reload, that everything was parsed fine.
+
+peace on your way,
+  Kephra

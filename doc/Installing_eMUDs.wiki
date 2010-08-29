@@ -1,0 +1,22 @@
+At first download and install EMACS as described in Downloading_eMUDs and
+EMACS_for_Windows. Linux or Unix users will skip, as EMACS is provided by
+most vendors.
+
+Create the following directories and file :
+
+| | Unix | Windows |
+| Directory | $HOME/.emuds/ | C:\GNU\emuds\ |
+| Directory | $HOME/.emuds-maps/ | C:\GNU\emuds-maps\ |
+| Directory | $HOME/.emuds-logs/ | C:\GNU\emuds-logs\ |
+| File | $HOME/.emuds-db | C:\GNU\emuds-db |
+
+Next step is downloading the eMUDs archive. Unix users will unpack the
+eMUDs-YYYY-MM-DD.tar.gz into $HOME/.emuds/, while Windows users should
+unpack the eMUDs-YYYY-MM-DD.zip into C:\GNU\emuds\. Both need to create
+their eMUDs directory first.
+
+Now edit the emuds.emacs file to adopt your directory paths. And
+create a symlink from emuds.emacs to either $HOME/.emacs on Unix
+or copy it to C:\_emacs on Windows.
+
+Proceed with Starting_and_Stopping_eMUDs.

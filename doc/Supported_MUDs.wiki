@@ -1,0 +1,135 @@
+=head2 MUDs supporting any prompt protocol
+
+eMUDs supports line mode telnet servers providing prompt marks.
+
+I've not tested every MUDs in deep. eMUDs ships with example setup
+scripts for the MUDs I've tested. The following list shows homepage,
+hostname and port of the MUD and eMUDs setup for prompt.
+
+=head2 MUDs implementing RFC 885 :
+
+IAC EOR might be the best method to implement prompt marks without violating
+the RFCs. Clients have to request IAC EOR prompts with a telnet option, so
+clients who dont know prompt marks wont be confused by them.
+
+| [Abandoned_Reality] | Envy Envy 2.0 | abandoned.org | 4444 | [(emuds-setup-request-ga)|world-abandoned.el] |
+| [Cryosphere] | [Custom] custom - musicmud | cryosphere.org | 6666 | [(emuds-setup-request-eor)|world-cryosphere.el] |
+| [Dragonfire_II] | LP Custom 2.4.5 | dragonfiremud.com | 1999 | [(emuds-setup-request-eor)|world-dragonfire.el] |
+| [Ishar] | [Custom] | ishar.com | 9999 | [(emuds-setup-request-eor)|world-ishar.el] |
+| [TAPPMud] | LPMud | tapp.mud.de | 23 | [(emuds-setup-request-eor)|world-tapp.el] |
+| [The_Burbs] | [Unknown] EwToo/summink | Burbs.org | 4567 | [(emuds-setup-request-eor)|world-burbs.el] |
+| [The_Chatting_Zone_TCZ] | [Custom] [Custom] | tcz.net | 8342 | [(emuds-setup-request-eor)|world-tcz.el] |
+| [The_Resort_Online] | [Unknown] EW | resort.org | 2323 | [(emuds-setup-request-eor)|world-resort.el] |
+| [TubMud] | LPMud | morgen.cs.tu-berlin.de | 7680 | [(emuds-setup-request-eor)|world-tubmud.el] |
+
+=head2 MUDs implementing IAC GA at first prompt
+
+Starting the login prompt with IAC GA is nearly RFC 854 conformant, but MUDs
+are not half duplex. MUD clients know that servers are not half duplex, so
+this is only a minor issue.
+
+| [BatMUD] | LP LpMUD (customized ldmud)| batmud.bat.org | 23 | [(emuds-setup-support-ga)|world-batmud.el] |
+| [Demon_s_Gate] | LP CD Driver| demonsgate.org | 3011 | [(emuds-setup-support-ga)|world-demonsgate.el] |
+| [Muddy_Waters] | LPmud (CD)| mw.muddywaters.org | 3000 | [(emuds-setup-support-ga)|world-muddy.el] |
+| [Northern_Lights] | Aber AberMUD 4 - NL-dirt (based on DIRT 3.0)| aber.ludd.ltu.se | 6715 | [(emuds-setup-support-ga)|world-northern.el] |
+| [OuterSpace] | LP MUD| mud.stack.nl | 3333 | [(emuds-setup-support-ga)|world-outerspace.el] |
+| [Purple_Dragon] | Rom PDM 1.2| pdragon.org | 5555 | [(emuds-setup-support-ga)|world-purpledragon.el] |
+| [Realm_of_Magic] | Circle 2.2 based / C++ Custom | rom.mud.de | 4000 | [(emuds-setup-support-ga)|world-rom.el] |
+| [Synergy] | LP CD Lib| synergy.org | 2000 | [(emuds-setup-support-ga)|world-synergy.el] |
+
+<h2>MUDs implementing IAC GA after request</h2>
+
+This is not RFC conformant, as telnet servers have to start with all options
+turned off. Those servers have silently turned the IAC DO SGA option on.
+
+They provide prompt marks, if the client behaves in a non standard way.
+
+| [A_Midnight_Fantasy] | LP Modified MudOS v22a41 | amidnightfantasy.com | 4500 | (emuds-setup-request-ga) |
+| [Accursed_Lands] | LP | accursed-lands.com | 8000 | (emuds-setup-request-ga) |
+| [Ages_of_Despair] | LP MudOS driver on a modified TMI-2 mudlib | aod.mine.nu | 5000 | (emuds-setup-request-ga) |
+| [Akanbar] | [Custom] | akanbar.com | 23 | (emuds-setup-request-ga) |
+| [Anarres_II] | [Custom] MudOS A2-0.99.x series experimental LP driver | mudlib.anarres.org | 5000 | (emuds-setup-request-ga) |
+| [Ascension] | LP Dead Souls, Heavily Customized | ascension.mudworld.com | 4000 | (emuds-setup-request-ga) |
+| [Asgard_s_Honor] | LP DGD v1.2p2 | asgard.aardmud.org | 5454 | (emuds-setup-request-ga) |
+| [Astaria] | LP Heavily Modified TMI-2 | astaria3.com | 5000 | (emuds-setup-request-ga) |
+| [Avalon] | Avalon | avalon-rpg.com | 23 | (emuds-setup-request-ga) |
+| [Avalon_The_First_Age] | [Custom] Unlimited | firstage.net | 23 | (emuds-setup-request-ga) |
+| [Bakhara] | LP Lima-1.0a5 (sorta) | bakhara.org | 4000 | (emuds-setup-request-ga) |
+| [Beyond_Despair] | [Custom] | beyonddespair.com | 2500 | (emuds-setup-request-ga) |
+| [ChaosMUD] | LP MudOS Driver, with Customizations | chaosmud.org | 23 | (emuds-setup-request-ga) |
+| [DarkRifts] | LP MudOS v22.2b14 with heavily modified TMI-2 mudlib | darkrifts.org | 5000 | (emuds-setup-request-ga) |
+| [Dawn_of_the_Immortals] | LP Custom MUDlib | immortal.org | 2000 | (emuds-setup-request-ga) |
+| [Daybreak_Ridge] | LP MudOS V22pre8 Darkelib 0.1 | dbrmud.no-ip.com | 5560 | (emuds-setup-request-ga) |
+| [Demonslair] | LP Wildfire Mudlib 3 under MudOS | demonslair.hn.org | 7272 | (emuds-setup-request-ga) |
+| [Desolation] | LP Lima Mudlib, version 1.0a8 (LPMud) | desolation.org | 7878 | (emuds-setup-request-ga) |
+| [Discworld] | LP Discworld LP | discworld.imaginary.com | 23 | [(emuds-setup-request-ga)|world-discworld.el] |
+| [Divided_Sky] | LP Skylib 1.6 | divided-sky.com | 7300 | (emuds-setup-request-ga) |
+| [Dreamers] | TMI-2 | cal006031.student.utwente.nl | 1998 | (emuds-setup-request-ga) |
+| [Dreamverse] | LP Nightmare -DreamIVr1.0 | dreamverse.montpeculier.com | 9600 | (emuds-setup-request-ga) |
+| [Electric_Sheep] | [Custom] DGD Based | spg.franklin.edu | 2000 | (emuds-setup-request-ga) |
+| [Eye_of_the_World_MUD] | LP Heavily customized TMI-2 | wot.eyemud.com | 2222 | (emuds-setup-request-ga) |
+| [Final_Realms] | LP LP mud with MudOS | login.finalrealms.org | 4001 | (emuds-setup-request-ga) |
+| [Flaming_Coast] | LP Discworld/Skylib 1.6 | flaming-coast.com | 4000 | (emuds-setup-request-ga) |
+| [Forgotten_Paradigm] | LP [LP] | mud.forgottenparadigm.com | 7710 | (emuds-setup-request-ga) |
+| [Frontiers_II] | [Unknown] Frontiers (TMI) | frontiersmud.org | 5555 | (emuds-setup-request-ga) |
+| [Gate] | [Custom] Gate 1.4 | gatemud.dyndns.org | 3000 | (emuds-setup-request-ga) |
+| [Genesis] | LP LPMud - CDlib 4.05 | genesis.tekno.chalmers.se | 3011 | (emuds-setup-request-ga) |
+| [Haven] | LP | duuk.com | 4000 | (emuds-setup-request-ga) |
+| [Icesus] | LP Icelib | icesus.org | 23 | (emuds-setup-request-ga) |
+| [IgorMud] | LP DGD | igormud.org | 1701 | (emuds-setup-request-ga) |
+| [InsomniaMUD] | [Custom] | insomniamud.org | 7878 | (emuds-setup-request-ga) |
+| [Islands_of_Myth] | LP Started from lima 1.0b3 | islandsofmyth.org | 3000 | (emuds-setup-request-ga) |
+| [LegendMUD] | [Custom] Architecturally derived from Diku | mud.legendmud.org | 9999 | (emuds-setup-request-ga) |
+| [Legends_of_Elanathia] | LP Sorrows | mud.elanathia.com | 4243 | (emuds-setup-request-ga) |
+| [Lost_Lands] | LP Skyfire Mudlib | llands.servehttp.com | 7000 | (emuds-setup-request-ga) |
+| [Lost_Wishes] | LP MudOS TMI-2 Fully customized | lost.wishes.net | 5555 | (emuds-setup-request-ga) |
+| [Midnight_Sun] | LP MudOS with custom additions | midnight-sun.ludd.luth.se | 3000 | (emuds-setup-request-ga) |
+| [Peril] | LP MudOS v22.2b11 NM 3.2.1.99b | mud.krollmark.com | 3000 | (emuds-setup-request-ga) |
+| [Realms_of_Chaos] | LP ChaosLib 1.0/Nightmare 3.2 | realmsofchaos.com | 3456 | (emuds-setup-request-ga) |
+| [Realms_of_the_Dragon] | LP LP | mud.rod.org | 3000 | (emuds-setup-request-ga) |
+| [Red_Dragon] | LP LIMA mudlib/mudos v22.2b9 | reddragon.org | 3000 | (emuds-setup-request-ga) |
+| [Split_Infinity] | Heavily modded Nightmare IVr4 | si.nu | 4000 | (emuds-setup-request-ga) |
+| [StarMUD] | LP Custom (MudOS 22.2b13, StarLib 4.0b) | starmud.com | 4000 | [(emuds-setup-request-ga)|world-starmud.el] |
+| [SumuMud] | LP MudOS | sumu.org | 3000 | (emuds-setup-request-ga) |
+| [The_Eternal_Fantasy] | LP Highly modified LPC-based | bb14.betterbox.net | 3333 | (emuds-setup-request-ga) |
+| [The_Land_LPMud] | LP LandLib | mud.spin.de | 6666 | (emuds-setup-request-ga) |
+| [The_New_Horizon] | LP | thenewhorizon.no-ip.info | 9999 | (emuds-setup-request-ga) |
+| [The_Two_Towers] | LP Highly customized TMI-2 1.1.1 mudlib on MudOS v22 | towers.angband.com | 9999 | [(emuds-setup-request-ga)|world-towers.el] |
+| [The_Unofficial_Squaresoft_MUD] | LP Lima 1.0a6 / MudOS v22.2b12 | uossmud.sandwich.net | 9000 | (emuds-setup-request-ga) |
+| [Thranduil] | LP | thranduil.genesismuds.com | 1200 | (emuds-setup-request-ga) |
+| [Threshold_RPG] | [Custom] Role Play Required | threshold-rpg.com | 23 | (emuds-setup-request-ga) |
+| [Twilight_LPMUD] | LP MudOS v22.2b14 Nightmare MudLib | twilight-mud.no-ip.info | 9999 | (emuds-setup-request-ga) |
+| [Vincent_s_Hollow] | LP MudOS v21.7-VH-980915 | mud.vhdev.com | 1991 | (emuds-setup-request-ga) |
+| [Virtual_Realities] | LP MudOs | vr.frostbite.org | 3019 | (emuds-setup-request-ga) |
+
+=head2 Foreign language MUDs
+
+Several german speaking MUDs are based on the [MorgenGrauen] code base.
+
+| [AnderLand] | LP NATIVE mode, driver version 03.02.1@137 | al.mud.de | 31415 | [(emuds-setup-request-eor)|world-anderland.el] |
+| [Beutelland] | [Custom] RoleMUD | bl.mud.at | 5678 | [(emuds-setup-request-eor)|world-beutelland.el] |
+| [MorgenGrauen] | LPmud, property based, native German | mg.mud.de | 23 | [(emuds-setup-request-eor)|world-morgengrauen.el] |
+| [Nordland] | LP LPmud, Mudlib is a Silberland/Morgengrauen derivate | nordmud.de | 4711 | [(emuds-setup-request-eor)|world-nordland.el] |
+| [Regenbogen] | LP LD 3.3, basing on Morgengrauen's lib, BSX-extensions | rb.mud.de | 23 | [(emuds-setup-request-eor)|world-regenbogen.el] |
+| [SilberLand] | LP minor patches applied to 3.2.1@141 | mud.silberland.at | 4711 | [(emuds-setup-request-eor)|world-silberland.el] |
+| [Wunderland] | LP LD 3.2.9| wunderland.mud.de | 4711 | [(emuds-setup-request-eor)|world-wunderland.el] |
+
+Sorry, I'm only speaking German and English good enough to play games.
+So I was'nt even able to understand the website.
+
+| [Arkadia] | LP CDlib| arkadia.rpg.pl | 23 | (emuds-setup-support-ga) |
+| [Barsawia] | LP CDlib| barsawia.uni.cc | 23 | (emuds-setup-support-ga) |
+| [Lost_In_Time] | [LPmud] LP MUD | lit.fsid.cvut.cz | 7680 | (emuds-setup-request-ga) |
+| [Warlock] | LP CDlib| warlock.pl | 23 | (emuds-setup-support-ga) |
+
+=head2 Pay to play MUDs
+
+Those MUDs are tested by my robot script, to prompt for login and
+password. So they might work. I have <b>not</b> tested them in person. 
+
+| [Age_of_the_Throne] | [Custom] Original| aott.com | 23 | (emuds-setup-support-ga) |
+| [Medievia] | [Custom] Custom| medievia.com | 4000 | (emuds-setup-support-ga) |
+| [Aetolia_the_Midnight_Age] | [Custom]| aetolia.com | 23 | (emuds-setup-support-ga) |
+| [RetroMUD] | RetroMUD (4.0) | retromud.org | 3000 | (emuds-setup-request-ga) |
+| [Achaea_Dreams_of_Divine_Lands] | [Custom]| achaea.com | 23 | (emuds-setup-support-ga) |
+| [Lusternia_Age_of_Ascension] | [Unknown] Rapture| lusternia.com | 23 | (emuds-setup-support-ga) |

@@ -1,0 +1,20 @@
+eMUDs is a MUD_Client written in EMACS.
+
+Well, i have not used emacs before. It was to complex to me.
+I was of course able to configure; make ;make install it.
+GNU is used to run out of the box. But i still use vi, 20
+years of Unix cant change in a day.
+
+I started to write eMUDs because Tinyfugue came to its limits.
+I was in need of a real programming language to code triggers,
+hotkeys channels and lots of other things. I evaluated several
+mud clients, none of them offered the flexibility I needed.
+
+So I decided to write my own full featured MUD_Client from
+scratch. The first decision was the runtime environment and
+programming language. I decided on EMACS and LISP. EMACS is
+free software, and available for a lot of operating systems.
+LISP was designed to solve AI problems, and is well suited
+for releasing the player from the burden of repeating tasks.
+
+Proceed with Downloading_eMUDs.

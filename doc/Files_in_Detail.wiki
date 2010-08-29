@@ -1,0 +1,26 @@
+Configurations :
+
+| L<emuds.emacs> | An example EMACS start script |
+| L<emuds-config.el> | An eMUDs configuration |
+| L<emuds-worlds.el> | A list of tested worlds |
+
+The main eMUDs client :
+
+| L<emuds.el> | The eMUDs client |
+
+Modules loaded on demand :
+
+| L<emuds-channel.el> | detaching channels |
+| L<emuds-dopath.el> | command definition for speedwalks |
+| L<emuds-doctor.el> | annoy with the doctor |
+
+Examples for Realm of Magic :
+
+| L<world-rom.el> | world definition |
+| L<rom-basics.el> | basic triggers and hotkeys |
+| L<rom-skills.el> | some usefull skills |
+| L<rom-spells.el> | some usefull spells |
+| L<rom-track.el> | the track command |
+| L<rom-speedwalk.el> | list of RoM speedwalks |
+| L<rom-alchemie.el> | alchemie looting |
+| L<rom-channel.el> | RoM channel definitions |

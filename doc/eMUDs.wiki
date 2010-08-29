@@ -1,0 +1,22 @@
+<div align="right">
+<font size=2>
+abusing the world most sophisticated text editor !
+ for playing games.
+</font>
+</div>
+
+ ;;; EMACS                                                            EMACS ;;;
+ ;;; MACRO  eMUDs (c) Wed Oct 30 16:29:28 CET 2002                    MACRO ;;;
+ ;;; ACTED            GNU General Public License                      ACTED ;;;
+ ;;; CREDO            kraehe@copyleft.de                              CREDO ;;;
+ ;;; SODOM                                                            SODOM ;;;
+
+- What_is_eMUDs
+- Downloading_eMUDs
+- Installing_eMUDs
+- Configuring_eMUDs
+- Starting_and_Stopping_eMUDs
+- eMUDs_Commands
+- Files_in_Detail
+- Prompt_Protocol
+- Supported_MUDs

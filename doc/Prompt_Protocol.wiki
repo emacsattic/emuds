@@ -1,0 +1,196 @@
+If you are responsible for a MUD server and wish to make it more conformant
+to telnet implementation, read the next sections about telnet.
+
+=head2 The Problem
+
+A MUD server may send its output line by line to a raw socket, but
+it will then packed into IP and sent over several routers, who repack it.
+The result will be that a read() call won't return a line, but some
+arbitrary block of text, that is not adjusted to line boundaries.
+
+In eMUDs nearly anything, even color processing, is based on triggers.
+
+Running triggers on those fragments is impossible, as half of the
+string may come with the next block. The solution is to run triggers
+only on lines that are finished.
+
+eMUDs distinguishes between two type of finished lines. The first is the
+block of lines ending in CR LF "\r\n". The later is the prompt line
+terminated with IAC GA or IAC EOR.
+
+The block of lines is suitable for for multi line triggers, while
+the prompt line will only be processed by system triggers and user
+level prompt triggers.
+
+Unfortunately: Several MUD servers do neither implement IAC GA nor
+IAC GA, and most who try implement IAC GA in a broken way.
+
+=head2 IAC Telnet Signals
+
+All telnet commands consist of at least a two byte sequence:  the
+Interpret-As-Command IAC "\377" escape character followed by the
+code for the command.
+
+eMUDs will recognize the following telnet protocol commands :
+
+| IAC IAC | "\377\377" | The "Y character |
+| IAC GA  | "\377\371" | Go Ahead signal for blocking prompts |
+| IAC EOR | "\377\357" | End Of Record signal for non blocking prompts |
+| IAC WILL ECHO | "\377\373\001" | Turn local echo off |
+| IAC WONT ECHO | "\377\374\001" | Turn local echo on |
+| IAC WILL SGA | "\377\373\003" | Curse - and enter dumb mode |
+| IAC WONT SGA | "\377\374\003" | Smile - and process prompts and triggers |
+| IAC WILL END-OF-RECORD | "\377\373\031" | Negotiate IAC DO END-OF-RECORD |
+| IAC WONT END-OF-RECORD | "\377\374\031" | Hope that prompts are marked with IAC GA |
+
+eMUDs will try to negotiate the following options :
+
+| IAC DONT SGA | "\377\376\003" | Enable IAC GA prompts |
+| IAC DO END-OF-RECORD | "\377\375\031" | Enable IAC EOR prompts |
+
+Other clients may try to negotiate :
+
+| IAC DO SGA | "\377\375\003" | Disable IAC GA prompts |
+| IAC DONT END-OF-RECORD | "\377\376\031" | Disable IAC EOR prompts |
+
+=head2 IAC IAC
+
+Even if most MUDs are hosted in US, some are 8 bit clean and allow european
+or Tolkien like names. Those MUDs need to care about the ÿ character as this
+one is "\377" in ISO-8859-1, so ÿ needs to be escaped by IAC.
+
+To display the ÿ character, send IAC IAC "\377\377". Be prepared to receive
+IAC IAC, if users want to talk using the ÿ character.
+
+=head2 IAC GA
+
+The <b>stupid</b> solution: Send IAC GA "\377\371" after each prompt.
+
+This is done by many muds, providing reliable prompt processing
+to most mud clients.
+
+eMUDs works fine with this broken misinterpretation of RFC 854.
+
+But IAC GA really means: I'm blocked now, I wont send anything
+until I received a line from your side.
+
+Sending IAC GA on any prompt may cause problems with mainframe
+telnet (IBM 2741&3125) implementation who understand IAC GA right.
+The IAC GA was intended for blocking prompts of half duplex terminals,
+so the right usage would be prompts like login, password, more, or the
+editor prompt when creating or writing mud-mail, if they are blocking
+prompts.
+
+eMUDs does not block on IAC GA - most MUDs implement only the stupid
+solution, and I'm happy that they implement any prompt signaling.
+
+=head2 IAC EOR
+
+Most muds will send a new prompt, after each block of text.
+
+Send IAC EOR "\377\357" after any non blocking prompt.
+ Often MUD prompts look like "<%dH %dM %dV> ".
+ Change that to "<%dH %dM %dV> \377\357".
+
+This will signal eMUDs, IBM3215 telnet and most mud clients that this
+is a non blocking prompt. Do not forget to send the additional CR LF
+"\r\n" before sending following lines. Neither IAC EOR nor IAC GA
+means end of line.
+
+eMUDs will interpret lines terminated with IAC EOR as a non blocking
+prompt.
+
+Some MUDs only send new prompts if the user typed some input. Those
+MUDs may want to mark the end of something with IAC EOR, to simplify
+multi line triggers. Place the IAC EOR directly after the CR LF of
+that block. This will be interpreted as an empty prompt and eMUDs
+will run multi line triggers between it and the last prompt.
+
+=head2 Telnet Option Negotiation
+
+At start all telnet options are turned off. This means WONT ECHO, WONT
+SGA, WONT EOR and other options are default and server does therefore not
+need to send any IAC WONT SOMETHING at start. The IAC WILL SOMETHING,
+may either tell the other side of the existence of an option, or it
+will turn this option on. The early RFCs had not been consistent in
+this code. The IAC DO SOMETHING and IAC DONT SOMETHING signals could
+be sent by the client to turn an option on or off. The server should
+send IAC WILL SOMETHING or IAC WONT SOMETHING to confirm or deny that
+option.
+
+=head2 IAC WONT ECHO
+
+The IAC WONT ECHO signal tells the client that the server wont echo
+input. So the client has to perform local editing and printing of
+input.
+
+A MUD server should start in IAC WONT ECHO mode but there is no need
+to send "\377\374\001" to tell the client that the server won't echo.
+Most mud server are not able to work in character echo mode, so be
+prepared to answer IAC WONT ECHO if a client asks IAC DO ECHO.
+
+=head2 IAC WILL ECHO
+
+Sending IAC WILL ECHO "\377\373\001" to a terminal is common practice
+to suppress printing passwords, as the terminal assumes, that that the
+server will echo. But the server will only echo the final CR LF, so
+no password is printed. Do not forget to turn the local echo on after
+receiving the password with sending IAC WONT ECHO "\377\374\001".
+
+=head2 IAC WONT SGA
+
+SGA is Suppress-Go-Ahead. Most normal telnet clients do not process
+IAC GA signals and may want to suppress them.
+
+A MUD server has blocking prompts, and should start in IAC DONT SGA
+mode, but there is no need to print "\377\374\003" string at start.
+Remember: WONT is the default for all telnet option.
+
+=head2 IAC DO SGA / IAC WILL SGA
+
+Clients who do not process prompts may veto the usage of IAC GA and
+send IAC DO SGA "\377\375\003". The server should answer IAC WILL SGA
+and start suppressing IAC GA signals.
+
+=head2 IAC DONT SGA / IAC WONT SGA
+
+Some servers are optimized for the most stupid <i>raw socket</i> clients,
+and start in IAC WILL SGA mode (not conforming to RFC) without telling it
+(even worse unconforming).
+
+eMUDs will try to negotiate IAC GA anyway by sending IAC DONT SGA
+"\377\376\003". The server should answer IAC WONT SGA "\377\374\003",
+and restart sending IAC GA prompts.
+
+=head2 IAC WONT END-OF-RECORD
+
+As usual: WONT is the default mode at start of a session. This means
+in practice that the first prompt in a mud must be a blocking prompt
+terminated with IAC GA. Else the option negation for non blocking prompt
+could be lagged out and become too late for the first prompt.
+
+=head2 IAC WILL END-OF-RECORD / IAC DO END-OF-RECORD / IAC WILL END-OF-RECORD
+
+Send IAC WILL END-OF-RECORD "\377\373\031" at initial connect if you do
+not want only the <i>stupid</i> solution. This will tell the client that your
+server knows about the END-OF-RECORD option.
+
+A client may request the END-OF-RECORD option with IAC DO END-OF-RECORD
+"\377\375\031". A server should confirm with sending a <b>2nd</b> IAC WILL
+END-OF-RECORD "\377\373\031" and should further replace any IAC GA "\377\371"
+with IAC EOR "\377\357" after each prompt.
+
+=head SEE ALSO
+
+For more information on TELNET protocol, see RFCs 854, 855, 858, 885, and 1123.
+RFCs can be obtained via FTP from http://www.faqs.org/rfcs/rfc1123.html and
+many other sites.
+
+=head2 Mainframes ?
+
+The first MUD like game was Zork/370, using '#cp msg userid some text' for
+chatting. And most mud clients still implement the look and feel of a 3270
+terminal that is used to dial into a virtual 3215 terminal of VM/370 system.
+
+Telnet from a VM/ESA system sould be a workable client for a MUD server that
+is implementing line mode telnet of RFC1123 correctly.
