@@ -1,6 +1,8 @@
 ;;; emuds.el (c) GPL 2001 kraehe(at)copyleft.de
 ;;; ---------------------------------------------------------------------------
 
+;;; License: GPL
+
 (require 'cl)
 
 (defvar emuds-world nil "current world and its properties")
